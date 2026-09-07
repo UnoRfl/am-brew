@@ -1,22 +1,19 @@
-# Two Ways to Start With ₱5,000
+# AM Brew — Two Ways to Start With ₱5,000
 
-An individual activity on the two reasoning paths an entrepreneur can take — **effectual**
+A group presentation on the two reasoning paths an entrepreneur can take — **effectual**
 (start from the means you already have) and **causal** (start from the goal and work
-backward) — run through one business a Philippine college student could actually start
-this week. Built as an eleven-slide presentation that also reads as a normal web page on
-a phone.
+backward) — worked through one business we could actually start this week: morning coffee
+and homemade cookies, sold before the 7:30 class.
 
-**Entrepreneurship · Individual Activity**
+Ten slides that also read as a normal web page on a phone.
 
-| | |
-|---|---|
-| **The business** | Kape sa Klase — pre-ordered iced coffee, one building, three days a week |
-| **Effectual answer** | Three things ₱5,000 could start, one picked, five dated actions this week, ₱3,800 of affordable loss with a written stop rule |
-| **Causal answer** | ₱6,000 net profit a month by December, divided back down to 24 cups a day, with the market, the strategy and four months of execution steps |
+**Entrepreneurial Mind · GEE 2000 · Section 66105**
+Javier, Daniel L. · Balada, John Melvin A. · Francisco, Caine Wesley M. · Rafael, Juan
+Miguel L. · Musa, Joshua Johan
 
 ## Live site
 
-> https://unorfl.github.io/entrep-5k-start/
+> https://unorfl.github.io/am-brew/
 
 ## Viewing it
 
@@ -26,45 +23,51 @@ a phone.
 | **Phone or tablet, landscape** | Full-screen deck. Swipe or tap the left/right half of the screen. The ⛶ button goes fullscreen. |
 | **Phone or tablet, portrait** | Opens the reading view — the same material as one scrollable page, because a 16:9 slide in portrait puts body text at about 5px. Tap **Slides** for the deck, **Read** to come back. |
 
-The URL tracks the current slide (`#1` … `#11`), so you can link someone straight to one
-slide.
+The URL tracks the current slide (`#1` … `#10`), so you can link someone straight to one
+slide. Each slide also carries speaker notes in the file, one line on what to say.
+
+## The numbers, in one place
+
+| | |
+|---|---|
+| Iced coffee | ₱60 a bottle, earns **₱35** |
+| Cookies | ₱35 a pack, earns **₱20** |
+| Start-up | **₱3,500** of the ₱5,000 — ₱700 each from five of us. ₱1,500 kept back to restock. |
+| The goal | **₱6,000 a month** by December → ₱1,500 a week → ₱500 a day → **10 bottles + 8 cookie packs**, three days a week |
+| Stop rule | Three weeks. Half the ₱3,500 back, or we stop and sell the bag. |
+
+Everything on the deck hangs off those first two lines, so if your costs are different,
+change them there first and the rest follows.
 
 ## Slides
 
 | | | |
 |---|---|---|
-| 01 | Cover | Same money, two starting points |
-| 02 | The Two Paths | Effectual vs causal, side by side — what each one decides by |
-| 03 | Means at Hand | Who I am, what I know, who I know, and the ₱5,000 |
-| 04 | Three Options | Three things ₱5,000 can start, with capital and margin for each |
-| 05 | The Choice | Option 01, and the five dated actions for this week |
-| 06 | Affordable Loss | ₱3,800, what I will not risk, and the stop rule |
-| 07 | Goal Backward | ₱6,000 a month ÷ ₱23 a cup ÷ 12 selling days = 24 cups a day |
-| 08 | The Market | Three floors, one building, 7:30 AM — and who is *not* the market |
-| 09 | The Plan | The strategy in one line, then four months and four numbers |
-| 10 | Both Paths | Which path answered which question |
-| 11 | Thank You | |
+| 01 | Cover | AM Brew, the group, the ₱5,000 |
+| 02 | The Two Paths | Effectual vs causal — what each one decides by |
+| 03 | Three Options | Coffee & cookies, cookies only, iced tea only |
+| 04 | What We Risk | ₱3,500, and the stop rule |
+| 05 | This Week | **The first action — five days, five jobs, ₱0 spent until Friday** |
+| 06 | Goal Backward | ₱6,000 a month divided down to one bag a day |
+| 07 | The Market | Our own building before the 7:30, and how the handover works |
+| 08 | The Plan | **The execution steps — four months, one job and one number each** |
+| 09 | Both Paths | Which path answered which question |
+| 10 | Thank You | |
+
+Slides 05 and 08 are the detailed ones on purpose. The rest are deliberately broad —
+they are prompts to talk from, not scripts to read.
 
 ## Before you present it
 
-Two things are deliberately generic, because they are yours to fill in:
-
-- **Your name and section.** The cover and the closing slide say *Entrepreneurship ·
-  Individual Activity* and nothing more. Add your name in `build/parts/slides.html` (slide
-  01's bottom block and slide 11) and `build/parts/mv.html` (the hero and the closing
-  card), then rebuild.
-- **The prices.** Every peso figure is a real quote from a grocery and an online
-  packaging seller in the first week of September 2026, and the deck says so on slide 05.
-  Re-quote them where you actually shop — the arithmetic on slides 05, 06 and 07 all
-  hangs off ₱40 a cup and ₱17 of cost, so if your cost moves, `₱23` and `24 cups a day`
-  move with it.
+The peso figures are our own estimates, not quotes from a supplier. Check them where you
+actually shop and adjust slides 03, 04, 05 and 06 to match.
 
 ## Publishing (GitHub Pages)
 
 Already on: **Settings → Pages → Deploy from a branch**, branch `main`, folder
 `/ (root)`. Any push of `index.html` goes live at the URL above within about a minute.
-Nothing here needs a build step or a server on the hosting side — it is one
-self-contained HTML file.
+Nothing needs a build step or a server on the hosting side — it is one self-contained
+HTML file.
 
 ## What's in the repo
 
@@ -88,7 +91,7 @@ python make-cover.py   # rewrites ../og-cover.jpg (needs Pillow)
 
 | `build/parts/` | |
 |---|---|
-| `slides.html` | The eleven 1920×1080 artboards. **Edit this for slide content.** |
+| `slides.html` | The ten 1920×1080 artboards. **Edit this for slide content.** |
 | `mv.html` | The portrait reading view — the same material reflowed. **Edit this too**, so both stay in sync. |
 | `helmet.html` | The design system: palette, type scale, reading-view CSS. |
 | `tail.html` | Entrance replay, pointer glow, swipe, rail and hash routing. |

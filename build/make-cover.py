@@ -79,30 +79,30 @@ def main():
     d.line([rail_x, 0, rail_x, H], fill=(38, 38, 44), width=2)
 
     pad = 74
-    tracked(d, (pad, 92), "EFFECTUAL & CAUSAL REASONING", font(21), ACCENT, 7.2)
+    tracked(d, (pad, 92), "ENTREPRENEURIAL MIND \u00b7 GEE 2000", font(21), ACCENT, 6.2)
 
     d.text((pad, 168), "TWO WAYS TO START", font=font(66), fill=WHITE)
-    tracked(d, (pad, 246), "WITH \u20b15,000", font(66), ACCENT, 0)
+    tracked(d, (pad, 246), "AM BREW", font(66), ACCENT, 0)
 
     d.line([pad, 356, rail_x - 96, 356], fill=RULE, width=2)
 
     body = font(25, bold=False)
-    d.text((pad, 388), "Start from what I already have, or start from where", font=body, fill=MUTED)
-    d.text((pad, 424), "I want to end up. Same money \u2014 two different weeks.", font=body, fill=MUTED)
+    d.text((pad, 388), "Morning coffee and homemade cookies, sold before", font=body, fill=MUTED)
+    d.text((pad, 424), "the 7:30 class \u2014 started twice, two different ways.", font=body, fill=MUTED)
 
-    tracked(d, (pad, 500), "THE BUSINESS", font(18), (156, 156, 162), 4.4)
-    d.text((pad, 532), "Kape sa Klase \u2014 pre-ordered iced coffee,", font=font(24), fill=WHITE)
-    d.text((pad, 566), "one building, \u20b140 a cup", font=font(24), fill=WHITE)
+    tracked(d, (pad, 500), "GROUP PRESENTATION \u00b7 SECTION 66105", font(18), (156, 156, 162), 4.2)
+    d.text((pad, 532), "Effectual path \u00b7 Causal path \u00b7 one business,", font=font(24), fill=WHITE)
+    d.text((pad, 566), "\u20b13,500 at risk", font=font(24), fill=WHITE)
 
     # Rail: the three numbers the deck is built on.
     rx = rail_x + 56
     rows = [("\u20b15,000", "STARTING CAPITAL"),
-            ("\u20b13,800", "AT RISK"),
-            ("24", "CUPS A DAY")]
+            ("\u20b13,500", "AT RISK"),
+            ("\u20b1500", "A DAY, 3 DAYS A WEEK")]
     y = 128
     for i, (big, cap) in enumerate(rows):
         tracked(d, (rx, y), big, font(56), WHITE if i == 0 else (210, 64, 73), 0)
-        tracked(d, (rx, y + 72), cap, font(17), DIM, 4.0)
+        tracked(d, (rx, y + 72), cap, font(15 if len(cap) > 18 else 17), DIM, 3.2)
         y += 148
         if i < 2:
             d.line([rx, y - 40, W - 56, y - 40], fill=(45, 45, 52), width=1)

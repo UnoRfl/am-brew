@@ -24,9 +24,8 @@ from pathlib import Path
 HERE = Path(__file__).parent
 OUT = HERE.parent / "index.html"
 
-TITLE = "Two Ways to Start With ₱5,000 — Entrepreneurship"
-DESC = ("The same ₱5,000 run through both reasoning paths — effectual, then causal "
-        "— on one business a Philippine college student could actually start this week.")
+TITLE = "AM Brew — Two Ways to Start With ₱5,000"
+DESC = ("A group presentation for Entrepreneurial Mind (GEE 2000): the same ₱5,000 run through both reasoning paths — effectual, then causal — on AM Brew, morning coffee and homemade cookies.")
 
 XIMPORT = ('<x-import component-from-global-scope="deck-stage" '
            'from="1fd805ec-3320-4cee-aa8d-147c6eb868ea#/deck-stage.js" '

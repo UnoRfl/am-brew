@@ -152,7 +152,7 @@ class Component extends DCLogic {
       body.classList.toggle('mv-show-fs', !read && mqTouch.matches);
       body.classList.toggle('mv-show-read', !read && (mqRead.matches || mqTouch.matches && innerWidth <= 1250));
       body.classList.toggle('mv-rotate-hint', !read && mqPort.matches && innerWidth <= 900);
-      if (read) document.title = 'Two Ways to Start With ₱5,000';
+      if (read) document.title = 'AM Brew — Two Ways to Start With ₱5,000';
     };
     [mqRail, mqRead, mqTouch, mqPort].forEach((mq) => on(mq, 'change', apply));
     on(window, 'resize', apply, { passive: true });
