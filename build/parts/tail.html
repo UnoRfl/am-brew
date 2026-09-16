@@ -120,16 +120,45 @@ class Component extends DCLogic {
      rather than silently no-op'ing. */
   _mountResponsive() {
     const t0 = performance.now();
+    let timer = null;
+
+    const done = () => {
+      if (timer) { clearInterval(timer); timer = null; }
+      document.removeEventListener('visibilitychange', onVis);
+    };
     const tryMount = () => {
       const deck = document.querySelector('deck-stage');
-      if (deck && typeof deck.goTo === 'function' && deck.shadowRoot) { this._responsive(deck); return; }
-      if (performance.now() - t0 < 20000) requestAnimationFrame(tryMount);
+      if (!(deck && typeof deck.goTo === 'function' && deck.shadowRoot)) return false;
+      done();
+      this._responsive(deck);
+      return true;
     };
-    tryMount();
+    const onVis = () => { if (!document.hidden) tryMount(); };
+
+    // This used to poll with requestAnimationFrame alone against a 20s budget
+    // measured in wall-clock time. rAF is throttled to a crawl -- or stopped
+    // outright -- in a tab that is not visible, so a link opened in a
+    // background tab, or on a connection slow enough to push deck-stage past
+    // the budget, burned the 20s without ever getting a poll in. The shell
+    // then never mounted at all: no Read button, no swipe, no fullscreen, and
+    // on a portrait phone no way off a 16:9 slide rendering body text at
+    // about 5px. An interval keeps polling where rAF will not, visibility
+    // change catches the tab coming back, and the budget is generous because
+    // the cost of one more poll is nothing next to the cost of giving up.
+    document.addEventListener('visibilitychange', onVis);
+    this._unmount = done;
+    if (tryMount()) return;
+    timer = setInterval(() => {
+      if (tryMount()) return;
+      if (performance.now() - t0 > 60000) done();
+    }, 120);
   }
 
   _responsive(deck) {
     this._deck = deck;
+    // apply() runs before _reader() has replaced these.
+    this._closeIndex = this._closeIndex || function () {};
+    this._syncNav = this._syncNav || function () {};
     const body = document.body;
     const cleanup = this._cleanup = [];
     const on = (t, ev, fn, o) => { t.addEventListener(ev, fn, o); cleanup.push(() => t.removeEventListener(ev, fn, o)); };
@@ -153,6 +182,12 @@ class Component extends DCLogic {
       body.classList.toggle('mv-show-read', !read && (mqRead.matches || mqTouch.matches && innerWidth <= 1250));
       body.classList.toggle('mv-rotate-hint', !read && mqPort.matches && innerWidth <= 900);
       if (read) document.title = 'AM Brew — Two Ways to Start With ₱5,000';
+      // The stylesheet defaults a portrait phone to the reading view so it is
+      // what first paints; from here the shell owns the decision, so stand the
+      // CSS fallback down rather than leaving two rules arguing about it.
+      document.documentElement.classList.add('mv-ready');
+      if (!read) this._closeIndex();
+      else this._syncNav();
     };
     [mqRail, mqRead, mqTouch, mqPort].forEach((mq) => on(mq, 'change', apply));
     on(window, 'resize', apply, { passive: true });
@@ -188,6 +223,8 @@ class Component extends DCLogic {
     const backBtn = document.getElementById('mv-toslides');
     if (backBtn) on(backBtn, 'click', () => { forced = 'deck'; apply(); });
 
+    this._reader(on, cleanup, () => { forced = 'read'; apply(); });
+
     // ── Swipe navigation (tap-left/right is already native to the deck) ──
     let sx = 0, sy = 0, st = 0, swiped = 0;
     on(deck, 'touchstart', (e) => {
@@ -222,13 +259,158 @@ class Component extends DCLogic {
       const n = parseInt(location.hash.slice(1), 10);
       if (n > 0) deck.goTo(n - 1);
     });
-    const start = parseInt(location.hash.slice(1), 10);
+    const entry = (window.__amEntry != null ? window.__amEntry : location.hash.slice(1));
+    const start = parseInt(entry, 10);
     if (start > 1) { try { deck.goTo(start - 1); } catch (err) {} }
 
     apply();
   }
 
+  /* ── Reading-view navigator ───────────────────────────────────────
+     The deck has a thumbnail rail; the reading view had nothing, and it is
+     twelve sections and about 8,000px of scroll on a 375px phone. So the bar
+     title becomes a control: it names the section you are in, and opens an
+     index that jumps to any of them. Plus a progress hairline, a back-to-top,
+     and #r<n> so a section can be linked the way a slide can.
+
+     Scroll work is rAF-coalesced and touches only two CSS custom properties
+     and a class, so a scroll frame never reads layout. */
+  _reader(on, cleanup, goRead) {
+    const bar   = document.querySelector('.mv-bar');
+    const wrap  = document.querySelector('.mv-wrap');
+    const index = document.getElementById('mv-index');
+    const jump  = document.getElementById('mv-jump');
+    if (!bar || !wrap || !index || !jump) return;
+
+    const secs = [...wrap.querySelectorAll('article[data-nav]')];
+    if (!secs.length) return;
+    const num = (i) => String(i + 1).padStart(2, '0');
+    secs.forEach((el, i) => { el.id = 'r' + (i + 1); });
+
+    const jN = jump.querySelector('.mv-jump-n');
+    const jT = jump.querySelector('.mv-jump-t');
+
+    // ── index panel + scrim ──
+    secs.forEach((el, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = '<i></i><span></span>';
+      b.querySelector('i').textContent = num(i);
+      b.querySelector('span').textContent = el.dataset.nav;
+      on(b, 'click', () => { this._closeIndex(); this._goto(i); });
+      index.appendChild(b);
+    });
+    const marks = [...index.querySelectorAll('button')];
+
+    const scrim = document.createElement('div');
+    scrim.id = 'mv-scrim';
+    document.body.appendChild(scrim); cleanup.push(() => scrim.remove());
+    on(scrim, 'click', () => this._closeIndex());
+
+    const top = document.createElement('button');
+    top.type = 'button'; top.id = 'mv-top';
+    top.setAttribute('aria-label', 'Back to the top');
+    top.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>';
+    document.body.appendChild(top); cleanup.push(() => top.remove());
+    on(top, 'click', () => {
+      this._closeIndex();
+      scrollTo({ top: 0, behavior: this._smooth() });
+    });
+
+    this._closeIndex = () => {
+      document.body.classList.remove('mv-index-on');
+      jump.setAttribute('aria-expanded', 'false');
+    };
+    on(jump, 'click', () => {
+      const open = !document.body.classList.contains('mv-index-on');
+      document.body.classList.toggle('mv-index-on', open);
+      jump.setAttribute('aria-expanded', String(open));
+      if (open) {
+        const cur = index.querySelector('[aria-current="true"]');
+        if (cur) cur.scrollIntoView({ block: 'nearest' });
+      }
+    });
+    on(document, 'keydown', (e) => { if (e.key === 'Escape') this._closeIndex(); });
+
+    this._goto = (i) => {
+      const el = secs[i];
+      if (!el) return;
+      history.replaceState(null, '', '#r' + (i + 1));
+      el.scrollIntoView({ behavior: this._smooth(), block: 'start' });
+    };
+
+    // ── scroll state ──
+    let cur = -1, raf = null;
+    const barH = () => {
+      const h = Math.round(bar.getBoundingClientRect().height);
+      document.documentElement.style.setProperty('--mv-bar-h', h + 'px');
+      return h;
+    };
+    const read = () => {
+      raf = null;
+      const y = scrollY || document.documentElement.scrollTop;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const pct = max > 0 ? Math.min(100, Math.max(0, (y / max) * 100)) : 0;
+      document.documentElement.style.setProperty('--mv-p', pct.toFixed(2) + '%');
+      document.body.classList.toggle('mv-top-on', y > innerHeight * 0.9);
+
+      // The section whose top has passed just under the bar.
+      const line = barH() + 24;
+      let i = 0;
+      for (let k = 0; k < secs.length; k++) {
+        if (secs[k].getBoundingClientRect().top <= line) i = k; else break;
+      }
+      if (i !== cur) {
+        cur = i;
+        jN.textContent = num(i);
+        jT.textContent = secs[i].dataset.nav;
+        marks.forEach((b, k) => {
+          if (k === i) b.setAttribute('aria-current', 'true');
+          else b.removeAttribute('aria-current');
+        });
+      }
+    };
+    this._syncNav = () => { if (!raf) raf = requestAnimationFrame(read); };
+    on(window, 'scroll', this._syncNav, { passive: true });
+    on(window, 'resize', this._syncNav, { passive: true });
+
+    // ── entry: a #r<n> link, or a deck #<n> link opened on a phone ──
+    // Captured by the loader: by now deck-stage has already overwritten
+    // location.hash with the slide it decided to open on.
+    const h = (window.__amEntry != null ? window.__amEntry : location.hash.slice(1));
+    const rn = /^r(\d+)$/.exec(h);
+    const start = rn ? +rn[1] : +h;
+    if (rn) goRead();
+    if (start > 1 && start <= secs.length) {
+      // One rAF was not enough: the reading view has only just been given a
+      // display, deck-stage is still settling, and the browser restores its
+      // own scroll position afterwards -- the jump landed and was undone.
+      // Keep asking until the page actually moves, then stop.
+      try { history.scrollRestoration = 'manual'; } catch (e) {}
+      const target = secs[start - 1];
+      let tries = 0;
+      const land = () => {
+        target.scrollIntoView({ block: 'start' });
+        if (Math.round(scrollY) > 0) return;
+        // Only count a try the page was awake for: in a hidden tab the layout
+        // it needs may not have happened yet, and a fixed budget spent while
+        // throttled is the trap the mount poller used to fall into.
+        if (!document.hidden) tries++;
+        if (tries < 40) setTimeout(land, 60);
+      };
+      // Not requestAnimationFrame: it does not fire at all in a hidden tab,
+      // so the whole retry chain would never start.
+      land();
+    }
+    read();
+  }
+
+  _smooth() {
+    return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  }
+
   componentWillUnmount() {
+    if (this._unmount) this._unmount();
     document.removeEventListener('slidechange', this._onSlideChange);
     window.removeEventListener('pointermove', this._onMove);
     document.removeEventListener('mouseleave', this._onLeave);

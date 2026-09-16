@@ -2,13 +2,22 @@
   <div class="mv-amb" aria-hidden="true"><i></i><i></i></div>
 
   <header class="mv-bar">
-    <span class="mv-bar-t">AM Brew · Two Ways to Start</span>
+    <button type="button" id="mv-jump" class="mv-jump" aria-expanded="false" aria-controls="mv-index">
+      <i class="mv-jump-n">01</i>
+      <span class="mv-jump-t">Cover</span>
+      <svg class="mv-jump-c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
     <button type="button" id="mv-toslides" class="mv-btn">Slides</button>
   </header>
 
+  <!-- Twelve sections is about 8,000px of scroll on a phone; the bar doubles
+       as the index so a section is one tap away instead of a thumb marathon.
+       Populated from [data-nav] below. -->
+  <nav id="mv-index" aria-label="Sections"></nav>
+
   <main class="mv-wrap">
 
-    <article class="mv-card mv-hero">
+    <article data-nav="Cover" class="mv-card mv-hero">
       <span class="eyebrow">Entrepreneurial Mind · GEE 2000</span>
       <h1 class="mv-h1">Two Ways to Start<br><em>AM Brew</em></h1>
       <p class="lead">Morning coffee and homemade cookies, sold before the 7:30 class. Started once from what we already have, and once from where we want to end up.</p>
@@ -20,7 +29,7 @@
       </dl>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="The Two Paths" class="mv-card">
       <span class="eyebrow">The Two Paths</span>
       <h2 class="mv-h2">Same ₱5,000, Two Starting Points</h2>
       <ul class="three">
@@ -30,7 +39,7 @@
       <p class="src">Terms as defined by Saras D. Sarasvathy, "Causation and Effectuation," Academy of Management Review, 2001.</p>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="Three Options" class="mv-card">
       <span class="eyebrow">Effectual · What we could start</span>
       <h2 class="mv-h2">Three Things We Can Make at Home</h2>
       <ol class="four">
@@ -41,7 +50,7 @@
       <p class="note">We pick 01. It earns the most per item, and cookies do not melt on the way to school.</p>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="What We Risk" class="mv-card">
       <span class="eyebrow">Effectual · Affordable loss</span>
       <h2 class="mv-h2">The Most We Are Willing to Lose</h2>
       <div class="panel">
@@ -59,7 +68,7 @@
       <p class="dim">Losing ₱700 each costs us one week of allowance. That is why we can start on Monday instead of arguing about it for a month.</p>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="This Week" class="mv-card">
       <span class="eyebrow">Effectual · First action</span>
       <h2 class="mv-h2">This Week We Spend ₱0 Until Friday</h2>
       <ol class="steps">
@@ -71,7 +80,7 @@
       </ol>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="Goal Backward" class="mv-card">
       <span class="eyebrow">Causal · The goal, worked backward</span>
       <h2 class="mv-h2">₱6,000 a Month Is One Bag a Day</h2>
       <ol class="four">
@@ -84,7 +93,7 @@
       <p class="scale"><b>Can we sell it?</b> Eighteen items in one 30-minute window, all paid for the night before. Nobody queues, nothing is left over.</p>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="The Market" class="mv-card">
       <span class="eyebrow">Causal · The market</span>
       <h2 class="mv-h2">Our Own Building, Before the 7:30</h2>
       <ul class="three">
@@ -95,7 +104,7 @@
       <blockquote class="quote">Orders close at 8 PM. We bake and bottle at night, chill it, and hand it over in one 30-minute window the next morning.<cite>How it works</cite></blockquote>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="The Plan" class="mv-card">
       <span class="eyebrow">Causal · Execution steps</span>
       <h2 class="mv-h2">Four Months, One Job Each</h2>
       <ol class="recap">
@@ -107,7 +116,31 @@
       <p class="src">Checked every week: items sold, earnings per item, how many pre-orders we actually filled, and cash on hand — which never goes below ₱1,500.</p>
     </article>
 
-    <article class="mv-card">
+    <article data-nav="What Could Go Wrong" class="mv-card">
+      <span class="eyebrow">Risk · What could go wrong</span>
+      <h2 class="mv-h2">Four Things That Could Kill It</h2>
+      <ol class="risks">
+        <li><i>Demand</i><b>Everyone tries it once, then week three nobody orders.</b><span><em>What we do</em> We never buy stock before the orders are in. An empty list costs us a night off, not ₱3,500.</span></li>
+        <li><i>Food safety</i><b>One warm bottle makes somebody sick, and we are finished.</b><span><em>What we do</em> Made the night before, kept on ice, handed over by 8. Leftovers are thrown out, never re-sold.</span></li>
+        <li><i>People</i><b>We are five students with exams, and one of us will get sick.</b><span><em>What we do</em> Two people know every job. A day we cannot cover, we close orders the night before.</span></li>
+        <li><i>Money</i><b>The ₱3,500 quietly turns into five people&#39;s allowance.</b><span><em>What we do</em> One person holds the cash and counts it every Friday in front of the other four.</span></li>
+      </ol>
+      <p class="note">Every fix costs <b style="color:#F3F3F1">₱0</b> — with five people and ₱3,500, not spending is the only insurance we can afford. The fifth risk, permission to sell, is already answered on Wednesday, before any money moves.</p>
+    </article>
+
+    <article data-nav="Where It Is Thin" class="mv-card">
+      <span class="eyebrow">Honest gaps</span>
+      <h2 class="mv-h2">Where the Plan Is Still Thin</h2>
+      <ol class="recap">
+        <li><b>The peso figures are our estimates, not quotes</b><span>Nobody has stood in the store with the list yet. One of us prices the real basket before Friday, and slides 03 and 04 get the actual numbers.</span><em>Fixed before Friday</em></li>
+        <li><b>The ₱6,000 assumes every week is a normal week</b><span>We divided by four weeks and three selling days. Exam week, holidays and cancelled classes do not work that way — so December is the optimistic number, not the expected one.</span><em class="grey">Known, not solved</em></li>
+        <li><b>None of us has baked to a deadline before</b><span>Baking once is not the same as filling 18 paid orders on a school night. The first week tests us, not the product — which is why it is only ten bottles.</span><em>Week one tests it</em></li>
+        <li><b>One bag is a ceiling we have not costed past</b><span>Everything above ₱800 a day needs a second bag and a second person carrying it in. We stop at the ceiling rather than pretend we planned for it.</span><em class="grey">Out of scope</em></li>
+      </ol>
+      <p class="note">None of these stop us starting on Monday. They are what we check before the ₱3,500 leaves anyone&#39;s pocket — and what we would be asked about first.</p>
+    </article>
+
+    <article data-nav="Both Paths" class="mv-card">
       <span class="eyebrow">Recap</span>
       <h2 class="mv-h2">We Used Both — in This Order</h2>
       <ol class="recap">
@@ -117,7 +150,7 @@
       </ol>
     </article>
 
-    <article class="mv-card mv-end">
+    <article data-nav="Thank You" class="mv-card mv-end">
       <span class="eyebrow">AM Brew · Entrepreneurial Mind</span>
       <h2 class="mv-h2 mv-thanks">Thank you</h2>
       <p class="byline">₱5,000 is not enough to build a business. It is exactly enough to find out whether one is there.</p>

@@ -10,7 +10,7 @@ fetched at run time -- the published page is one self-contained file.
   parts/loader.html   <head> + the unpacker script that mints the blob URLs
   parts/assets.html   the gzipped runtime: manifest, ext_resources, page_order
   parts/helmet.html   the design system -- palette, type scale, reading view
-  parts/slides.html   the eleven 1920x1080 artboards          <- edit for content
+  parts/slides.html   the twelve 1920x1080 artboards          <- edit for content
   parts/mv.html       the portrait reading view               <- edit for content
   parts/tail.html     entrance replay, pointer glow, responsive shell
 

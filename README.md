@@ -5,7 +5,8 @@ A group presentation on the two reasoning paths an entrepreneur can take — **e
 backward) — worked through one business we could actually start this week: morning coffee
 and homemade cookies, sold before the 7:30 class.
 
-Ten slides that also read as a normal web page on a phone.
+Twelve slides that also read as a normal web page on a phone — including what could
+kill the business, and where our own plan is still thin.
 
 **Entrepreneurial Mind · GEE 2000 · Section 66105**
 Javier, Daniel L. · Balada, John Melvin A. · Francisco, Caine Wesley M. · Rafael, Juan
@@ -21,10 +22,10 @@ Miguel L. · Musa, Joshua Johan
 |---|---|
 | **Desktop / laptop** | `←` `→` or `Space` to move between slides. Thumbnail rail on the left. `Ctrl/⌘ + P` prints or saves one slide per page. |
 | **Phone or tablet, landscape** | Full-screen deck. Swipe or tap the left/right half of the screen. The ⛶ button goes fullscreen. |
-| **Phone or tablet, portrait** | Opens the reading view — the same material as one scrollable page, because a 16:9 slide in portrait puts body text at about 5px. Tap **Slides** for the deck, **Read** to come back. |
+| **Phone or tablet, portrait** | Opens the reading view — the same material as one scrollable page, because a 16:9 slide in portrait puts body text at about 5px. The bar names the section you are in and opens an index that jumps to any of the twelve; a hairline under it tracks how far through you are, and an arrow returns you to the top. Tap **Slides** for the deck, **Read** to come back. |
 
-The URL tracks the current slide (`#1` … `#10`), so you can link someone straight to one
-slide. Each slide also carries speaker notes in the file, one line on what to say.
+The URL tracks the current slide (`#1` … `#12`), so you can link someone straight to one
+slide; `#r1` … `#r12` do the same for the reading view. Each slide also carries speaker notes in the file, one line on what to say.
 
 ## The numbers, in one place
 
@@ -51,16 +52,26 @@ change them there first and the rest follows.
 | 06 | Goal Backward | ₱6,000 a month divided down to one bag a day |
 | 07 | The Market | Our own building before the 7:30, and how the handover works |
 | 08 | The Plan | **The execution steps — four months, one job and one number each** |
-| 09 | Both Paths | Which path answered which question |
-| 10 | Thank You | |
+| 09 | What Could Go Wrong | **The risks** — demand, food safety, people, money, and the ₱0 fix for each |
+| 10 | Where It Is Thin | **The gaps in our own plan**, named before anyone else names them |
+| 11 | Both Paths | Which path answered which question |
+| 12 | Thank You | |
 
 Slides 05 and 08 are the detailed ones on purpose. The rest are deliberately broad —
 they are prompts to talk from, not scripts to read.
 
+Slides 09 and 10 do different jobs. **09 is the business risk**: four things that could
+end AM Brew, each with the one thing we do about it — and every one of those costs
+nothing, because with five people and ₱3,500 not spending is the only insurance
+available. **10 is the honest audit of the deck itself**: the prices are estimates and
+not quotes, ₱6,000 a month assumes every week is a normal week, none of us has baked to
+a deadline, and one insulated bag is a ceiling nobody has costed past.
+
 ## Before you present it
 
 The peso figures are our own estimates, not quotes from a supplier. Check them where you
-actually shop and adjust slides 03, 04, 05 and 06 to match.
+actually shop and adjust slides 03, 04, 05 and 06 to match — slide 10 says so out loud,
+so the numbers on the deck should be real by the time you present it.
 
 ## Publishing (GitHub Pages)
 
@@ -109,3 +120,12 @@ entirely under `prefers-reduced-motion`.
 
 Every slide was checked to fit its own frame: the artboards are 1080px tall and nothing
 inside them overflows, so no line is clipped at any window size.
+
+On a phone the reading view is what first paints, before `deck-stage` has even upgraded,
+so a portrait screen never flashes a letterboxed slide on its way there. That also means
+the reading view is reachable even if the shell never mounts at all — which is what used
+to happen: the shell waited for `deck-stage` with `requestAnimationFrame` against a 20s
+wall-clock budget, and rAF is throttled to nothing in a tab that is not visible, so a
+link opened in a background tab burned the budget without a single poll and came up with
+no **Read** button, no swipe and no fullscreen. It polls on a timer now, and picks the
+tab back up on `visibilitychange`.
